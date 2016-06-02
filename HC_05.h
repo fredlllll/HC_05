@@ -22,7 +22,7 @@ class HC_05{
             case HC_05WorkMode::OrderResponse:
             digitalWrite(modePin,HIGH);
             break;
-            case HC_05WorkMode::AutomaticConnection:
+            case HC_05WorkMode::AutomaticConnection: //floating or low should mean auto connection.
             digitalWrite(modePin,LOW);
             break;
         }
@@ -35,12 +35,16 @@ class HC_05{
     
     void connect(){
         pinMode(modePin,OUTPUT);
-        pinMode(statePin,OUTPUT);
+        pinMode(statePin,INPUT);
     }
     
     void loop(){
         
     }
+	
+	uint8_t getStatePin(){
+		return digitalRead(statePin);
+	}
     
     void cmdTest(){
         sendCmd("AT");
