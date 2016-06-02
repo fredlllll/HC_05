@@ -1,5 +1,11 @@
 #ifndef simpleitoa_h
 #define simpleitoa_h
+
+template <class T> void swap ( T& a, T& b )
+{
+  T c(a); a=b; b=c;
+}
+
 void simplereverse(char str[], int length)
 {
     int start = 0;

@@ -72,7 +72,7 @@ class HC_05{
         sendCmd("AT+NAME?");
     }
     
-    void cmdGetRemoteName(uint8_t *raddress){
+    void cmdGetRemoteName(const char *raddress){
         beginCmd("AT+RNAME?");
         addCmd(raddress);
         endCmd();
@@ -97,7 +97,7 @@ class HC_05{
     }
     
     void cmdSetDeviceType(uint32_t type){
-        char[11] num;
+        char num[11];
         simpleitoa(type,10,num);
         beginCmd("AT+CLASS=");
         addCmd(num);
@@ -108,7 +108,7 @@ class HC_05{
         sendCmd("AT+CLASS?");
     }
     
-    void cmdSetInquireAccessCode(uint8_t *code){
+    void cmdSetInquireAccessCode(const char *code){
         beginCmd("AT+IAC=");
         addCmd(code);
         endCmd();
@@ -120,7 +120,7 @@ class HC_05{
     
     void cmdSetInquireAccessMode(uint8_t mode, int maxDevices, uint8_t maxTime){
         beginCmd("AT+INQM=");
-        char[11] num;
+        char num[11];
         simpleitoa(mode,10,num);
         addCmd(num);
         addCmd(",");
@@ -136,7 +136,7 @@ class HC_05{
         sendCmd("AT+INQM?");
     }
     
-    void cmdSetPassKey(uint8_t *pswd){
+    void cmdSetPassKey(const char *pswd){
         beginCmd("AT+PSWD=");
         addCmd(pswd);
         endCmd();
@@ -146,16 +146,16 @@ class HC_05{
         sendCmd("AT+PSWD?");
     }
     
-    //stopBits 0=1 bits, 1 = 2 bits. parityBit 0 = none, 1= odd, 2 = even.
-    void cmdSetBaud(uint32_t baud, uint8_t stopBits, uint8_t parityBit){
+    //stopBit 0=1 bits, 1 = 2 bits. parityBit 0 = none, 1= odd, 2 = even.
+    void cmdSetBaud(uint32_t baud, uint8_t stopBit, uint8_t parityBit){
         beginCmd("AT+UART=");
-        char[11] num;
+        char num[11];
         simpleitoa(baud,10,num);
         addCmd(num);
-        addCmd(",")
+        addCmd(",");
         simpleitoa(stopBit,10,num);
         addCmd(num);
-        addCmd(",")
+        addCmd(",");
         simpleitoa(parityBit,10,num);
         addCmd(num);
         endCmd();
@@ -167,7 +167,7 @@ class HC_05{
     
     void cmdSetConnectionMode(uint8_t mode){
         beginCmd("AT+CMODE=");
-        char[11] num;
+        char num[11];
         simpleitoa(mode,10,num);
         addCmd(num);
         endCmd();
@@ -177,7 +177,7 @@ class HC_05{
         sendCmd("AT+CMODE?");
     }
     
-    void cmdSetBindAddress(uint8_t *address){
+    void cmdSetBindAddress(const char *address){
         beginCmd("AT+BIND=");
         addCmd(address);
         endCmd();
@@ -209,7 +209,7 @@ class HC_05{
     
     void cmdSetPIO(uint8_t pin, uint8_t level){
         beginCmd("AT+PIO=");
-        char[11] num;
+        char num[11];
         simpleitoa(pin,10,num);
         addCmd(num);
         addCmd(",");
@@ -223,7 +223,7 @@ class HC_05{
     
     void cmdSetPIOMask(uint16_t mask){
         beginCmd("AT+MPIO=");
-        char[6] num;
+        char num[6];
         simpleitoa(mask,16,num); //why suddenly base 16?? the command set specification says so :C
         addCmd(num);
         endCmd();
@@ -235,7 +235,7 @@ class HC_05{
     
     void cmdSetPageScan(int inquiryInterval, int inquiryDuration, int pagingInterval, int pagingDuration){
         beginCmd("AT+IPSCAN=");
-        char[11] num;
+        char num[11];
         simpleitoa(inquiryInterval,10,num);
         addCmd(num);
         addCmd(",");
@@ -326,36 +326,36 @@ class HC_05{
         //later
     }   
     
-    void beginCmd(const uint8_t *cmd, const int len){
+    void beginCmd(const char *cmd, const int len){
         setWorkMode(HC_05WorkMode::OrderResponse);
-        stream.write(cmd,len);
+        stream->write(cmd,len);
     }
     
-    void beginCmd(const uint8_t *cmd){
+    void beginCmd(const char *cmd){
         beginCmd(cmd,strlen(cmd));
     }
     
-    void addCmd(const uint8_t *cmd, const int len){
-        stream.write(cmd,len);
+    void addCmd(const char *cmd, const int len){
+        stream->write(cmd,len);
     }
     
-    void addCmd(const uint8_t *cmd){
+    void addCmd(const char *cmd){
         addCmd(cmd,strlen(cmd));    
     }
     
     void endCmd(){
-        stream.write("\r\n");
+        stream->write("\r\n");
         setWorkMode(HC_05WorkMode::AutomaticConnection);
     }
     
-    void sendCmd(const uint8_t *cmd, const int len){
+    void sendCmd(const char *cmd, const int len){
         setWorkMode(HC_05WorkMode::OrderResponse);
-        stream.write(cmd,len);
-        stream.write("\r\n");
+        stream->write(cmd,len);
+        stream->write("\r\n");
         setWorkMode(HC_05WorkMode::AutomaticConnection);
     }
     
-    void sendCmd(const uint8_t *cmd){
+    void sendCmd(const char *cmd){
         sendCmd(cmd,strlen(cmd));
     }
 };
