@@ -1,0 +1,14 @@
+{
+  "name": "HC_05",
+  "keywords": "HC_05, HC05, bluetooth, module",
+  "description": "Library for the basic control commands of HC05 module",
+  "url": "",
+  "include": "HC_05.h",
+  "authors":
+  [
+	{
+      "name": "Frederik Gelder"
+    }
+  ],
+  "frameworks": "arduino"
+}
