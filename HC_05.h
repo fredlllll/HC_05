@@ -2,6 +2,14 @@
 #define HC_05_h
 #include "simpleitoa/simpleitoa.h"
 
+#define STRINGS_IN_FLASH
+#ifdef STRINGS_IN_FLASH
+	#define STR(X) (const char*)F(X)
+#else
+	#define STR(X) X
+#endif
+
+
 enum HC_05WorkRole{
     Slave = 0,
     Master = 1,
@@ -47,37 +55,37 @@ class HC_05{
 	}
     
     void cmdTest(){
-        sendCmd("AT");
+        sendCmd(STR("AT"));
     }
     
     void cmdReset(){
-        sendCmd("AT+RESET");
+        sendCmd(STR("AT+RESET"));
     }
     
     void cmdGetVersion(){
-        sendCmd("AT+VERSION?");
+        sendCmd(STR("AT+VERSION?"));
     }
     
     void cmdRestoreDefaults(){
-        sendCmd("AT+ORGL");
+        sendCmd(STR("AT+ORGL"));
     }
     
     void cmdGetBluetoothAddress(){
-        sendCmd("AT+ADDR?");
+        sendCmd(STR("AT+ADDR?"));
     }
     
     void cmdSetName(const char *name){
-        beginCmd("AT+NAME=");
+        beginCmd(STR("AT+NAME="));
         addCmd(name);
         endCmd();
     }
     
     void cmdGetName(){
-        sendCmd("AT+NAME?");
+        sendCmd(STR("AT+NAME?"));
     }
     
     void cmdGetRemoteName(const char *raddress){
-        beginCmd("AT+RNAME?");
+        beginCmd(STR("AT+RNAME?"));
         addCmd(raddress);
         endCmd();
     }
@@ -85,92 +93,92 @@ class HC_05{
     void cmdSetRole(HC_05WorkRole role){
         switch(role){
             case HC_05WorkRole::Slave:
-                sendCmd("AT+ROLE=0");
+                sendCmd(STR("AT+ROLE=0"));
                 break;
             case HC_05WorkRole::Master:
-                sendCmd("AT+ROLE=1");
+                sendCmd(STR("AT+ROLE=1"));
                 break;
             case HC_05WorkRole::Loopback:
-                sendCmd("AT+ROLE=2");
+                sendCmd(STR("AT+ROLE=2"));
                 break;
         }
     }
     
     void cmdGetRole(){
-        sendCmd("AT+ROLE?");
+        sendCmd(STR("AT+ROLE?"));
     }
     
     void cmdSetDeviceType(uint32_t type){
         char num[11];
         simpleitoa(type,10,num);
-        beginCmd("AT+CLASS=");
+        beginCmd(STR("AT+CLASS="));
         addCmd(num);
         endCmd();
     }
     
     void cmdGetDeviceType(){
-        sendCmd("AT+CLASS?");
+        sendCmd(STR("AT+CLASS?"));
     }
     
     void cmdSetInquireAccessCode(const char *code){
-        beginCmd("AT+IAC=");
+        beginCmd(STR("AT+IAC="));
         addCmd(code);
         endCmd();
     }
     
     void cmdGetInquireAccessCode(){
-        sendCmd("AT+IAC?");
+        sendCmd(STR("AT+IAC?"));
     }
     
     void cmdSetInquireAccessMode(uint8_t mode, int maxDevices, uint8_t maxTime){
-        beginCmd("AT+INQM=");
+        beginCmd(STR("AT+INQM="));
         char num[11];
         simpleitoa(mode,10,num);
         addCmd(num);
-        addCmd(",");
+        addCmd(STR(","));
         simpleitoa(maxDevices,10,num);
         addCmd(num);
-        addCmd(",");
+        addCmd(STR(","));
         simpleitoa(maxTime,10,num);
         addCmd(num);
         endCmd();
     }
     
     void cmdGetInquireAccessMode(){
-        sendCmd("AT+INQM?");
+        sendCmd(STR("AT+INQM?"));
     }
     
     void cmdSetPassKey(const char *pswd){
-        beginCmd("AT+PSWD=");
+        beginCmd(STR("AT+PSWD="));
         addCmd(pswd);
         endCmd();
     }
     
     void cmdGetPassKey(){
-        sendCmd("AT+PSWD?");
+        sendCmd(STR("AT+PSWD?"));
     }
     
     //stopBit 0=1 bits, 1 = 2 bits. parityBit 0 = none, 1= odd, 2 = even.
     void cmdSetBaud(uint32_t baud, uint8_t stopBit, uint8_t parityBit){
-        beginCmd("AT+UART=");
+        beginCmd(STR("AT+UART="));
         char num[11];
         simpleitoa(baud,10,num);
         addCmd(num);
-        addCmd(",");
+        addCmd(STR(","));
         simpleitoa(stopBit,10,num);
         addCmd(num);
-        addCmd(",");
+        addCmd(STR(","));
         simpleitoa(parityBit,10,num);
         addCmd(num);
         endCmd();
     }
     
     void cmdGetBaud(){
-        sendCmd("AT+UART?");
+        sendCmd(STR("AT+UART?"));
     }
     
     void cmdSetConnectionMode(uint8_t mode){
-        beginCmd("AT+CMODE=");
+        beginCmd(STR("AT+CMODE="));
         char num[11];
         simpleitoa(mode,10,num);
         addCmd(num);
@@ -178,55 +186,55 @@ class HC_05{
     }
     
     void cmdGetConnectionMode(){
-        sendCmd("AT+CMODE?");
+        sendCmd(STR("AT+CMODE?"));
     }
     
     void cmdSetBindAddress(const char *address){
-        beginCmd("AT+BIND=");
+        beginCmd(STR("AT+BIND="));
         addCmd(address);
         endCmd();
     }
     
     void cmdGetBindAddress(){
-        sendCmd("AT+BIND?");
+        sendCmd(STR("AT+BIND?"));
     }
     
     void cmdSetLEDAndConnectionStatus(uint8_t pio8, uint8_t pio9){
-        beginCmd("AT+POLAR=");
+        beginCmd(STR("AT+POLAR="));
         if(pio8){
-            addCmd("1");
+            addCmd(STR("1"));
         }else{
-            addCmd("0");
+            addCmd(STR("0"));
         }
-        addCmd(",");
+        addCmd(STR(","));
         if(pio9){
-            addCmd("1");
+            addCmd(STR("1"));
         }else{
-            addCmd("0");
+            addCmd(STR("0"));
         }
         endCmd();
     }
     
     void cmdGetLEDAndConnectionStatus(){
-        sendCmd("AT+POLAR?");
+        sendCmd(STR("AT+POLAR?"));
     }
     
     void cmdSetPIO(uint8_t pin, uint8_t level){
-        beginCmd("AT+PIO=");
+        beginCmd(STR("AT+PIO="));
         char num[11];
         simpleitoa(pin,10,num);
         addCmd(num);
-        addCmd(",");
+        addCmd(STR(","));
         if(level){
-            addCmd("1");
+            addCmd(STR("1"));
         }else{
-            addCmd("0");
+            addCmd(STR("0"));
         }
         endCmd();
     }
     
     void cmdSetPIOMask(uint16_t mask){
-        beginCmd("AT+MPIO=");
+        beginCmd(STR("AT+MPIO="));
         char num[6];
         simpleitoa(mask,16,num); //why suddenly base 16?? the command set specification says so :C
         addCmd(num);
@@ -234,28 +242,28 @@ class HC_05{
     }
     
     void cmdGetPIOMask(){
-        sendCmd("AT+MPIO?");
+        sendCmd(STR("AT+MPIO?"));
     }
     
     void cmdSetPageScan(int inquiryInterval, int inquiryDuration, int pagingInterval, int pagingDuration){
-        beginCmd("AT+IPSCAN=");
+        beginCmd(STR("AT+IPSCAN="));
         char num[11];
         simpleitoa(inquiryInterval,10,num);
         addCmd(num);
-        addCmd(",");
+        addCmd(STR(","));
         simpleitoa(inquiryDuration,10,num);
         addCmd(num);
-        addCmd(",");
+        addCmd(STR(","));
         simpleitoa(pagingInterval,10,num);
         addCmd(num);
-        addCmd(",");
+        addCmd(STR(","));
         simpleitoa(pagingDuration,10,num);
         addCmd(num);
         endCmd();
     }
     
     void cmdGetPageScan(){
-        sendCmd("AT+IPSCAN?");
+        sendCmd(STR("AT+IPSCAN?"));
     }
     
     void cmdSetSNIFF(){
@@ -263,7 +271,7 @@ class HC_05{
     }
     
     void cmdGetSNIFF(){
-        sendCmd("AT+SNIFF?");
+        sendCmd(STR("AT+SNIFF?"));
     }
     
     void cmdSetSafety(){
@@ -271,7 +279,7 @@ class HC_05{
     }
     
     void cmdGetSafety(){
-        sendCmd("AT+SENM?");
+        sendCmd(STR("AT+SENM?"));
     }
     
     void cmdDeleteAuthDevice(){
@@ -279,7 +287,7 @@ class HC_05{
     }
     
     void cmdDeleteAllAuthDevices(){
-        sendCmd("AT+RMAAD");
+        sendCmd(STR("AT+RMAAD"));
     }
     
     void cmdSeekAuthDevice(){
@@ -287,27 +295,27 @@ class HC_05{
     }
     
     void cmdGetAuthDeviceCount(){
-        sendCmd("AT+ADCN?");
+        sendCmd(STR("AT+ADCN?"));
     }
     
     void cmdGetRecentDeviceAddress(){
-        sendCmd("AT+MRAD?");
+        sendCmd(STR("AT+MRAD?"));
     }
     
     void cmdGetWorkStatus(){
-        sendCmd("AT+STATE?");
+        sendCmd(STR("AT+STATE?"));
     }
     
     void cmdInitializeSPPProfileLib(){
-        sendCmd("AT+INIT");
+        sendCmd(STR("AT+INIT"));
     }
     
     void cmdGetVisibleBluetoothDevices(){
-        sendCmd("AT+INQ");
+        sendCmd(STR("AT+INQ"));
     }
     
     void cmdCancelDevice(){
-        sendCmd("AT+INQC");
+        sendCmd(STR("AT+INQC"));
     }
     
     void cmdSetPair(){
@@ -319,7 +327,7 @@ class HC_05{
     }
     
     void cmdDisconnect(){
-        sendCmd("AT+DISC");
+        sendCmd(STR("AT+DISC"));
     }
     
     void cmdEnterEnergyMode(){
@@ -348,14 +356,14 @@ class HC_05{
     }
     
     void endCmd(){
-        stream->write("\r\n");
+        stream->write(STR("\r\n"));
         setWorkMode(HC_05WorkMode::AutomaticConnection);
     }
     
     void sendCmd(const char *cmd, const int len){
         setWorkMode(HC_05WorkMode::OrderResponse);
         stream->write(cmd,len);
-        stream->write("\r\n");
+        stream->write(STR("\r\n"));
         setWorkMode(HC_05WorkMode::AutomaticConnection);
     }
     
